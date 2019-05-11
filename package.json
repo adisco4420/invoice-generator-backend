@@ -1,0 +1,29 @@
+{
+  "name": "invoice-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adisco4420/invoice-generator-backend.git"
+  },
+  "keywords": [
+    "invoice",
+    "expense"
+  ],
+  "author": "Sodiq Alabi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adisco4420/invoice-generator-backend/issues"
+  },
+  "homepage": "https://github.com/adisco4420/invoice-generator-backend#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.7"
+  }
+}
