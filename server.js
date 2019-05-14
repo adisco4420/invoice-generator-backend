@@ -24,8 +24,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use('/user', UserRoutes);
-console.log(env.MONGODB_URI);
-
 app.listen(port).on('listening', () => {
   console.log('We are live on ' + port);
 });
