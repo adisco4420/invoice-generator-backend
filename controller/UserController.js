@@ -34,7 +34,7 @@ const RegisterUser = async function(req, res) {
         } else {
           res.status(500).json({
             status: 'error',
-            message: 'server error occured',
+            message: err,
           });
         }
       }
