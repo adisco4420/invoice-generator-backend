@@ -18,7 +18,7 @@ const RegisterUser = async function(req, res) {
         });
         const result = user.toJSON();
         delete result['password'];
-        sendMail('confirm', 'adisco4420@gmail.com', token);
+        sendMail('confirm', user.email, token);
         res.status(200).json({
           status: 'success',
           data: {
@@ -39,19 +39,18 @@ const RegisterUser = async function(req, res) {
         }
       }
 }
-// verify email
-const ConfirmUser = function (req, res) {
+const ConfirmUser = async function (req, res) {
   try {
     const token = req.body.token;
-    const tokenData = jwt.verify(token, process.env.SECRET);
+    const tokenData = jwt.verify(token, env.JWT_SECRET);
 
-    const user = await EmployeeModel.findById(tokenData.id)
+    const user = await UserModel.findById(tokenData.id)
     if (user.isVerified) return res.status(422).json({
       status: 'error',
       message: 'account has already been verified'
     });
 
-    const updateUser = await EmployeeModel.findByIdAndUpdate(tokenData.id, {
+    const updateUser = await UserModel.findByIdAndUpdate(tokenData.id, {
       isVerified: true
     }, {
       new: true
@@ -67,23 +66,22 @@ const ConfirmUser = function (req, res) {
   } catch (error) {
     return res.status(401).json({
       status: 'error',
-      message: 'you are not authorizaed'
+      message: 'you are not authorized'
     });
 
   }
 }
-//resend email
-const ResendEmail = function (req, res) {
+const ResendEmail = async function (req, res) {
   try {
-    const user = await EmployeeModel.findOne({email: req.body.email})
+    const user = await UserModel.findOne({email: req.body.email})
     if (!user) return res.status(404).json({status: 'error', message: 'user not found'});
     if (user.isVerified) return res.status(422).json({status: 'error', message: 'you are already verified'});
     const token = jwt.sign({
       id: user._id
-    }, process.env.SECRET, {
+    }, env.JWT_SECRET, {
       expiresIn: '1h'
     });
-    sendMail('confirm', 'adisco4420@gmail.com', token);
+    sendMail('confirm', user.email, token);
     res.status(200).json({status: 'success', message: 'verification message has been sented'})
   } catch (error) {
     res.status(500).json({status:'error', message: 'server error'})
