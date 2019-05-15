@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/adisco4420/invoice-generator-backend#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
