@@ -34,7 +34,7 @@ module.exports = function sendMail(path, email, token) {
 </head>
 <body>
     <div class="container text-secondary p-3 text-center">
-        <h3 class="text-primary"><i>Invoice Generation</i></h3>
+        <h3 class="text-primary"><i>Invoice Generator</i></h3>
         <p class="mt-3">${message.msg1}</p>
         <p class="mt-2">${message.msg2}</p>
         <div class="mt-3"><button class="btn btn-primary btn-md">
