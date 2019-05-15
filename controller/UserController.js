@@ -1,8 +1,8 @@
 const UserModel = require('../models/UserModel');
-const AuthMiddleWare = require('../middlewares/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const env = require('../env')
+const sendMail = require('../email');
 
 const RegisterUser = async function(req, res) {
     try {
@@ -18,7 +18,7 @@ const RegisterUser = async function(req, res) {
         });
         const result = user.toJSON();
         delete result['password'];
-        // sendMail('confirm', 'adisco4420@gmail.com', token);
+        sendMail('confirm', 'adisco4420@gmail.com', token);
         res.status(200).json({
           status: 'success',
           data: {
@@ -39,7 +39,58 @@ const RegisterUser = async function(req, res) {
         }
       }
 }
+// verify email
+const ConfirmUser = function (req, res) {
+  try {
+    const token = req.body.token;
+    const tokenData = jwt.verify(token, process.env.SECRET);
 
+    const user = await EmployeeModel.findById(tokenData.id)
+    if (user.isVerified) return res.status(422).json({
+      status: 'error',
+      message: 'account has already been verified'
+    });
+
+    const updateUser = await EmployeeModel.findByIdAndUpdate(tokenData.id, {
+      isVerified: true
+    }, {
+      new: true
+    });
+    if (!updateUser) return res.status(403).json({
+      status: 'error',
+      message: 'user not found'
+    })
+    res.status(200).json({
+      status: 'success',
+      data: updateUser
+    })
+  } catch (error) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'you are not authorizaed'
+    });
+
+  }
+}
+//resend email
+const ResendEmail = function (req, res) {
+  try {
+    const user = await EmployeeModel.findOne({email: req.body.email})
+    if (!user) return res.status(404).json({status: 'error', message: 'user not found'});
+    if (user.isVerified) return res.status(422).json({status: 'error', message: 'you are already verified'});
+    const token = jwt.sign({
+      id: user._id
+    }, process.env.SECRET, {
+      expiresIn: '1h'
+    });
+    sendMail('confirm', 'adisco4420@gmail.com', token);
+    res.status(200).json({status: 'success', message: 'verification message has been sented'})
+  } catch (error) {
+    res.status(500).json({status:'error', message: 'server error'})
+  }
+}
 module.exports = {
-    RegisterUser
+    RegisterUser,
+    ConfirmUser,
+    ResendEmail
 }
