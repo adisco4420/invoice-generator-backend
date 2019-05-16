@@ -17,3 +17,7 @@ exports.SetupUserValidator = {
   businnessCategory: joi.string().required(),
   currency: joi.string().required()
 };
+exports.LoginUserValidator = {
+  email: joi.string().email({ minDomainSegments: 2 }).required(),
+  password: joi.required()
+};
