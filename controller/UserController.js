@@ -98,10 +98,45 @@ const SetupUser = async function (req, res) {
     res.status(500).json({status: 'error', message: "server error occured"})
   }
 }
+const LoginUser = async function (req, res) {
+  try {
+    const user = await UserModel.findOne({
+      email: req.body.email
+    }, '+password');
+    if (!user) return res.status(404).json({
+      status: 'not found',
+      message: 'invalid password or email'
+    });
 
+    const isValidPassword = await bcrypt.compare(req.body.password, user.password)
+    if (!isValidPassword) return res.status(401).json({
+      status: 'error',
+      message: 'invalid password or email'
+    })
+
+    const result = user.toJSON();
+    delete result['password'];
+    const token = jwt.sign({
+      id: user.id
+    }, env.JWT_SECRET, {
+      expiresIn: '1h'
+    });
+    res.status(200).json({
+      result,
+      token
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'server error occured'
+    })
+  }
+}
 module.exports = {
     RegisterUser,
     ConfirmUser,
     ResendEmail,
-    SetupUser
+    SetupUser,
+    LoginUser
 }
