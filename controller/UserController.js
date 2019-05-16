@@ -22,7 +22,8 @@ const RegisterUser = async function(req, res) {
         res.status(200).json({
           status: 'success',
           data: {
-            result: result
+            result: result,
+            token
           }
         });
       } catch (err) {
@@ -87,8 +88,20 @@ const ResendEmail = async function (req, res) {
     res.status(500).json({status:'error', message: 'server error'})
   }
 }
+const SetupUser = async function (req, res) {
+  try {
+    const user = await UserModel.findById(req.user)
+    if(!user) return res.status(404).json({status:'not found', message: 'user not found'})
+    const updateUser = await UserModel.findByIdAndUpdate(user._id, {...req.body})
+    res.status(200).json({status: 'success', message: updateUser})
+  } catch (error) {
+    res.status(500).json({status: 'error', message: "server error occured"})
+  }
+}
+
 module.exports = {
     RegisterUser,
     ConfirmUser,
-    ResendEmail
+    ResendEmail,
+    SetupUser
 }

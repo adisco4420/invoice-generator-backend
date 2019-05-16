@@ -10,3 +10,10 @@ exports.ConfirmUserValidator = {
 exports.ResendEmailValidator = {
   email: joi.string().email({ minDomainSegments: 2 }).required(),
 };
+exports.SetupUserValidator = {
+  firstName: joi.string().required(),
+  lastName: joi.string().required(),
+  businnessName: joi.string().required(),
+  businnessCategory: joi.string().required(),
+  currency: joi.string().required()
+};
