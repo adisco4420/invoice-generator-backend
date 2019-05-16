@@ -22,7 +22,8 @@ const RegisterUser = async function(req, res) {
         res.status(200).json({
           status: 'success',
           data: {
-            result: result
+            result: result,
+            token
           }
         });
       } catch (err) {
@@ -87,6 +88,8 @@ const ResendEmail = async function (req, res) {
     res.status(500).json({status:'error', message: 'server error'})
   }
 }
+
+
 module.exports = {
     RegisterUser,
     ConfirmUser,
