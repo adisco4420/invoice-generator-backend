@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
         req.user = tokenData.id;
         next();
     } catch (error) {
-       return res.status(401).json({status: 'error', message:'you are not authorizaed'});
+       return res.status(401).json({status: 'error', message:'you are not authorized'});
 
     }
 

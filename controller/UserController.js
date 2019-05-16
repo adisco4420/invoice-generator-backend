@@ -93,7 +93,7 @@ const SetupUser = async function (req, res) {
     const user = await UserModel.findById(req.user)
     if(!user) return res.status(404).json({status:'not found', message: 'user not found'})
     const updateUser = await UserModel.findByIdAndUpdate(user._id, {...req.body})
-    res.status(200).json({status: 'success', message: updateUser})
+    res.status(200).json({status: 'success', data: updateUser})
   } catch (error) {
     res.status(500).json({status: 'error', message: "server error occured"})
   }
@@ -122,8 +122,10 @@ const LoginUser = async function (req, res) {
       expiresIn: '1h'
     });
     res.status(200).json({
-      result,
-      token
+      data: {
+        result: result,
+        token
+      }
     })
 
   } catch (error) {
@@ -133,10 +135,30 @@ const LoginUser = async function (req, res) {
     })
   }
 }
+
+const UserProfile = async function (req, res) {
+  try {
+    const user = await UserModel.findById(req.user)
+    if (!user) return res.status(404).json({
+      status: 'bad input',
+      message: 'user not found'
+    });
+    res.status(200).json({
+      status: 'success',
+      data: user
+    })
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'server error'
+    })
+  }
+}
 module.exports = {
     RegisterUser,
     ConfirmUser,
     ResendEmail,
     SetupUser,
-    LoginUser
+    LoginUser,
+    UserProfile
 }
