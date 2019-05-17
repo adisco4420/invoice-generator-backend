@@ -10,11 +10,20 @@ const AddContact = async function (req, res) {
         })
         res.status(200).json({status: 'success', data: createContact})
     } catch (error) {
-        res.status(500).json({status: 'error', message: error})
+        res.status(500).json({status: 'error', message: 'server error occured'})
     }
-    
+}
+
+const ListContact = async function(req, res) {
+    try {
+        const contacts = await ContactModel.find({userId: req.user});
+        res.status(200).json({status: 'success', data: contacts});
+    } catch (error) {
+        res.status(500).json({status: 'error', message: 'server error occured'})
+    }
 }
 
 module.exports = {
-    AddContact
+    AddContact,
+    ListContact
 }
