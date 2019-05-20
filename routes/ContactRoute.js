@@ -6,5 +6,5 @@ const AuthMiddleWare = require('../middlewares/auth');
 const router = express.Router();
 
 router.post('/add', JoiValidator(AddContactValidator), AuthMiddleWare, ContactController.AddContact);
-
+router.get('/list', AuthMiddleWare, ContactController.ListContact)
 module.exports = router
