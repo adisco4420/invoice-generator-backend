@@ -27,10 +27,10 @@ const UserSchema = new mongoose.Schema({
     currency: {
         type: String,
     },
-    businnessName: {
+    businessName: {
         type: String,
     },
-    businnessCategory: {
+    businessCategory: {
         type: String,
     }, 
     phoneNumber: {

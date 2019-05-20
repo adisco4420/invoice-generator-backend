@@ -13,8 +13,8 @@ exports.ResendEmailValidator = {
 exports.SetupUserValidator = {
   firstName: joi.string().required(),
   lastName: joi.string().required(),
-  businnessName: joi.string().required(),
-  businnessCategory: joi.string().required(),
+  businessName: joi.string().required(),
+  businessCategory: joi.string().required(),
   currency: joi.string().required()
 };
 exports.LoginUserValidator = {
