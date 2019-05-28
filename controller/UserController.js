@@ -10,6 +10,11 @@ const RegisterUser = async function(req, res) {
         const user = await UserModel.create({
           ...req.body,
           isVerified: false,
+          accounts: [
+            {title: 'income', balance: 0.00},
+            {title: 'expense', balance: 0.00},
+            {title: 'outstanding', balance: 0.00}
+          ]
         });
         const token = jwt.sign({
           id: user._id

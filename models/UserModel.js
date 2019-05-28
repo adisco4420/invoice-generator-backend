@@ -37,12 +37,11 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    ExpenseAmount: {
-        type: Number
-    },
-    IncomeAmount: {
-        type: Number
+    accounts: {
+        type: Array,
+        required: true
     }
+
 })
 const UserModel = mongoose.model('user', UserSchema)
 module.exports = UserModel;
