@@ -23,7 +23,7 @@ const RegisterUser = async function(req, res) {
         });
         const result = user.toJSON();
         delete result['password'];
-        // sendMail('confirm', user.email, token);
+        sendMail('confirm', user.email, token);
         res.status(200).json({
           status: 'success',
           data: {
