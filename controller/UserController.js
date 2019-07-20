@@ -18,7 +18,7 @@ const RegisterUser = async function(req, res) {
         });
         const token = jwt.sign({
           id: user._id
-        }, 'jdhjgdgdg', {
+        }, env.JWT_SECRET, {
           expiresIn: '1h'
         });
         const result = user.toJSON();
