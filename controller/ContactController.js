@@ -10,7 +10,11 @@ const AddContact = async function (req, res) {
         })
         res.status(200).json({status: 'success', data: createContact})
     } catch (error) {
-        res.status(500).json({status: 'error', message: 'server error occured'})
+        if (error.code === 11000) {
+            res.status(400).json({status: 'error', message: 'contact email already exist'})
+        } else {
+            res.status(500).json({status: 'error', message: error})
+        }
     }
 }
 
