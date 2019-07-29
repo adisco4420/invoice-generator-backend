@@ -27,7 +27,18 @@ const ListContact = async function(req, res) {
     }
 }
 
+const DeleteContact = async function (req, res) {
+    try {
+        const contact = await ContactModel.findByIdAndDelete(req.params.id);
+        if(contact) return res.status(200).json({status: 'success', data: contact})
+        res.status(403).json({status: 'failed', message: 'forbidden'})
+    } catch (error) {
+        res.status(500).json({status: 'error', message: 'server error occured'})        
+    }
+    
+}
 module.exports = {
     AddContact,
-    ListContact
+    ListContact,
+    DeleteContact
 }

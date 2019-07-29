@@ -1,10 +1,11 @@
 const express = require('express');
 const JoiValidator = require('../middlewares/validator');
 const ContactController = require('../controller/ContactController');
-const { AddContactValidator } = require('../validations/ContactValidator');
+const validator = require('../validations/ContactValidator');
 const AuthMiddleWare = require('../middlewares/auth');
 const router = express.Router();
 
-router.post('/add', JoiValidator(AddContactValidator), AuthMiddleWare, ContactController.AddContact);
+router.delete('/delete/:id', AuthMiddleWare, ContactController.DeleteContact);
+router.post('/add', JoiValidator(validator.AddContactValidator), AuthMiddleWare, ContactController.AddContact);
 router.get('/list', AuthMiddleWare, ContactController.ListContact)
 module.exports = router
