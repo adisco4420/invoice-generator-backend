@@ -1,20 +1,20 @@
 const ContactModel = require('../models/ContactModel');
-const UserModel = require('../models/UserModel');
+const { validateDuplicate } = require('../services/contactSrv');
 
 const AddContact = async function (req, res) {
     try {
-        const user = await UserModel.findById(req.user)
-        const createContact = await ContactModel.create({
-           userId: user._id,
-           ...req.body
-        })
+        const contactList = await ContactModel.find({userId: req.user})
+        if (validateDuplicate(contactList, req.body.email, 'email')) {
+            const createContact = await ContactModel.create({
+                userId: req.user,
+                ...req.body
+             })
         res.status(200).json({status: 'success', data: createContact})
-    } catch (error) {
-        if (error.code === 11000) {
-            res.status(400).json({status: 'error', message: 'contact email already exist'})
         } else {
-            res.status(500).json({status: 'error', message: error})
+            res.status(400).json({status: 'error', message: `(${req.body.email}) email already exist in your contact`})
         }
+    } catch (error) {
+        res.status(500).json({status: 'error', message: error})
     }
 }
 
