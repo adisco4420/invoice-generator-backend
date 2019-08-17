@@ -38,7 +38,7 @@ const DeleteContact = async function (req, res) {
     
 }
 
-const ViewContact = async function name(req, res) {
+const ViewContact = async function (req, res) {
     try {
         const contact = await ContactModel.findById(req.params.id);
         if(contact) return res.status(200).json({status: 'success', data: contact})
@@ -46,9 +46,18 @@ const ViewContact = async function name(req, res) {
         res.status(500).json({status: 'error', message: 'server error occured'})                
     }
 }
+const UpdateContact = async function (req, res) {
+    try {
+        const updatedContact = await ContactModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true});
+        if(updatedContact) return res.status(200).json({status: 'success', data: updatedContact})
+    } catch (error) {
+        res.status(500).json({status: 'error', message: 'server error occured'})                        
+    }
+}
 module.exports = {
     AddContact,
     ListContact,
     DeleteContact,
-    ViewContact
+    ViewContact,
+    UpdateContact
 }
