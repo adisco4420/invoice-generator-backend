@@ -7,7 +7,12 @@ const AddContact = async function (req, res) {
         if (validateDuplicate(contactList, req.body.email, 'email')) {
             const createContact = await ContactModel.create({
                 userId: req.user,
-                ...req.body
+                ...req.body,
+                accounts: [
+                    {title: 'total', balance: 0.00},
+                    {title: 'paid', balance: 0.00},
+                    {title: 'pending', balance: 0.00}
+                  ]
              })
         res.status(200).json({status: 'success', data: createContact})
         } else {
@@ -41,7 +46,8 @@ const DeleteContact = async function (req, res) {
 const ViewContact = async function (req, res) {
     try {
         const contact = await ContactModel.findById(req.params.id);
-        if(contact) return res.status(200).json({status: 'success', data: contact})
+        if(contact) return res.status(200).json({status: 'success', data: contact});
+        res.status(404).json({status: 'failed', message: 'Not Found'})
     } catch (error) {
         res.status(500).json({status: 'error', message: 'server error occured'})                
     }
@@ -49,7 +55,8 @@ const ViewContact = async function (req, res) {
 const UpdateContact = async function (req, res) {
     try {
         const updatedContact = await ContactModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true});
-        if(updatedContact) return res.status(200).json({status: 'success', data: updatedContact})
+        if(updatedContact) return res.status(200).json({status: 'success', data: updatedContact});
+        res.status(404).json({status: 'failed', message: 'Not Found'})
     } catch (error) {
         res.status(500).json({status: 'error', message: 'server error occured'})                        
     }
