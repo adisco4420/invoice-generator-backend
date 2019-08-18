@@ -12,11 +12,12 @@ const AddContact = async function (req, res) {
                     {title: 'total', balance: 0.00},
                     {title: 'paid', balance: 0.00},
                     {title: 'pending', balance: 0.00}
-                  ]
+                  ],
+                  createdAt: new Date()
              })
         res.status(200).json({status: 'success', data: createContact})
         } else {
-            res.status(400).json({status: 'error', message: `(${req.body.email}) email already exist in your contact`})
+            res.status(400).json({status: 'failed', message: `(${req.body.email}) email already exist in your contact`})
         }
     } catch (error) {
         res.status(500).json({status: 'error', message: error})
