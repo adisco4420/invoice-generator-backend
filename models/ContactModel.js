@@ -19,6 +19,14 @@ const ContactSchema = new mongoose.Schema({
     },
     address: {
         type: String
+    },
+    accounts: {
+        type: Array,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        required: true
     }
 })
 
