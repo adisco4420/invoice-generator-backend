@@ -55,9 +55,22 @@ const ViewContact = async function (req, res) {
 }
 const UpdateContact = async function (req, res) {
     try {
-        const updatedContact = await ContactModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true});
-        if(updatedContact) return res.status(200).json({status: 'success', data: updatedContact});
-        res.status(404).json({status: 'failed', message: 'Not Found'})
+        const contact = await ContactModel.findById(req.params.id);
+        if (contact.email === req.body.email) {
+            const updatedContact = await ContactModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true});
+            if(updatedContact) return res.status(202).json({status: 'success', data: updatedContact});
+            res.status(404).json({status: 'failed', message: 'Not Found'})
+        } else {
+            const contactList = await ContactModel.find({userId: req.user})
+            if (validateDuplicate(contactList, req.body.email, 'email')) {
+                const updatedContact = await ContactModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true});
+                if(updatedContact) return res.status(202).json({status: 'success', data: updatedContact});
+                res.status(404).json({status: 'failed', message: 'Not Found'})
+            } else {
+                res.status(400).json({status: 'failed', message: `(${req.body.email}) email already exist in your contact`})            
+            }
+        }
+ 
     } catch (error) {
         res.status(500).json({status: 'error', message: 'server error occured'})                        
     }
